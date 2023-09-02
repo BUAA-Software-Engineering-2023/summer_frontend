@@ -114,13 +114,12 @@ async function handleAdd(userInfo, isaccept) {
 	await teamFunction.acceptInvitation(userInfo.id, isaccept)
 	await queryALL()
 	await getAllInvitations()
-  useCustomLoading().end.then(() => {});
 	dialogTableVisible.value = false
 }
 
 onMounted(() => {
-	queryALL()
-	getAllInvitations()
+	queryALL().then(()=>{useCustomLoading().end.then(() => {});});
+	getAllInvitations();
 });
 
 </script>
