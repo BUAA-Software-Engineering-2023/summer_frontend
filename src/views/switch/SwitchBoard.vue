@@ -126,7 +126,7 @@ async function handleAdd(userInfo, isaccept) {
 }
 
 onMounted(() => {
-	queryALL().then(()=>{useCustomLoading().end.then(() => {});});
+	queryALL().then(()=>{useCustomLoading().end();});
 	getAllInvitations();
 });
 
