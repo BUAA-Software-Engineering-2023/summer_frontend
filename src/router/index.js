@@ -47,7 +47,8 @@ const router = createRouter({
         path: '/switch',
         component: () => import('@/views/switch/SwitchBoard.vue'),
         meta: {
-            'hiddenHeader': true
+            'hiddenHeader': true,
+            loading: true
         }
     }, {
         path: '/document/:documentId',
@@ -95,7 +96,9 @@ router.beforeEach((to, from) => {
 });
 
 router.afterEach(to=> {
-    nextTick(useCustomLoading().end).then(() => {});
+    if (!to.meta.loading) {
+        nextTick(useCustomLoading().end).then(() => {});
+    }
 });
 
 export default router
