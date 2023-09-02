@@ -183,7 +183,7 @@ async function get_all_design() {
 const previewPath = ref();
 async function goPreview() {
   const result = await previewAPI.startPreview(getProjId())
-  previewSrc.value = 'http://localhost:5173/preview?project=' + getProjId()
+  previewSrc.value = 'http://azure.pesenteur.eu.org/preview?project=' + getProjId()
   previewPath.value = '/preview?project=' + getProjId();
   dialogVisible.value = true
 }
