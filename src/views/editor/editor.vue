@@ -671,7 +671,7 @@ const processDocuments = (data) => {
 
 async function generateLink() {
   // 在这里生成共享链接，可以根据 isEditable 的值来决定是否允许编辑
-  const baseUrl = 'http://127.0.0.1:5173/shared/';
+  const baseUrl = 'http://azure.pesenteur.eu.org/shared/';
   share.value = true
   console.log(documentId.value, isEditable.value)
   await documentRequest.createShareLink(documentId.value, isEditable.value)
