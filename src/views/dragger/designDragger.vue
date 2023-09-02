@@ -4,7 +4,7 @@
       <el-aside :key="showSidebar" v-if="showSidebar" width="200px">
         <el-row class="tac">
           <el-col :span="24">
-            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+            <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
               <el-menu-item index="5" @click="goBehind">
 <!--                <font-awesome-icon style="margin: auto;" :icon="['fas', 'left-long']" />-->
                  <span style="margin:auto"><strong>返回</strong></span>
@@ -155,6 +155,9 @@ function openDesign(designId) {
 
     console.log('-----------------------------------------------------------------------')
 
+    changeDesign(designId)
+  }else{
+    editableTabsValue.value = designId
     changeDesign(designId)
   }
 }
