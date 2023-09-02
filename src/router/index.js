@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import useCustomLoading from "@/utils/loading";
+import {nextTick} from "vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -45,7 +47,8 @@ const router = createRouter({
         path: '/switch',
         component: () => import('@/views/switch/SwitchBoard.vue'),
         meta: {
-            'hiddenHeader': true
+            'hiddenHeader': true,
+            loading: true
         }
     }, {
         path: '/document/:documentId',
@@ -75,6 +78,10 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from) => {
+    useCustomLoading().start({
+        fullscreen: true,
+        text: '加载中，请稍后'
+    });
     const token = localStorage.getItem('TOKEN');
     if (!to.meta.no_login && !token && to.path !== '/login') {
         // 如果没有登录且访问的不是 /login 路由或设置了 no_login 标记的路由，重定向到 /login
@@ -87,4 +94,11 @@ router.beforeEach((to, from) => {
         return false;
     }
 });
+
+router.afterEach(to=> {
+    if (!to.meta.loading) {
+        nextTick(useCustomLoading().end).then(() => {});
+    }
+});
+
 export default router
