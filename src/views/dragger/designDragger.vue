@@ -45,11 +45,15 @@
                 </el-menu-item-group>
               </el-sub-menu>
 
-              <el-menu-item index="3" @click="goPreview">
+              <el-menu-item v-show="ifStartPreview === false" index="3" @click="goPreview">
                 <span style="margin:auto"><strong>生成预览</strong></span>
               </el-menu-item>
 
-              <el-menu-item index="4" @click="closePreview">
+<!--              <el-menu-item index="4" @click="closePreview">-->
+<!--                <span style="margin:auto"><strong>删除预览</strong></span>-->
+<!--              </el-menu-item>-->
+
+              <el-menu-item v-show="ifStartPreview === true" index="4" @click="closePreview">
                 <span style="margin:auto"><strong>删除预览</strong></span>
               </el-menu-item>
 
@@ -180,16 +184,21 @@ async function get_all_design() {
   myResult.value = result.data
 }
 
+const ifStartPreview = ref(false)
+
 const previewPath = ref();
 async function goPreview() {
   const result = await previewAPI.startPreview(getProjId())
+  ifStartPreview.value = true
   previewSrc.value = 'http://azure.pesenteur.eu.org/preview?project=' + getProjId()
+  // previewSrc.value = 'http://localhost:5173/preview?project=' + getProjId()
   previewPath.value = '/preview?project=' + getProjId();
   dialogVisible.value = true
 }
 
 async function closePreview() {
   const result = await previewAPI.cancelPreview(getProjId())
+  ifStartPreview.value = false
   window.alert('预览已关闭，链接失效')
 
 }
