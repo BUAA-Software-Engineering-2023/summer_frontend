@@ -39,7 +39,7 @@
                     <el-icon><icon-menu /></el-icon>
                     <span class="moji">{{ team.name }}</span>
                     <el-popconfirm confirm-button-text="Yes" cancel-button-text="No" :icon="InfoFilled"
-                      icon-color="#626AEF" title="你确定要删除该团队吗?" @confirm="deleteTeam(team.id)" @cancel="cancelEvent">
+                      icon-color="#626AEF" title="你确定要删除该团队吗?" @confirm="deleteTeam(team.id)">
                       <template #reference>
                         <el-button>Delete</el-button>
                       </template>
@@ -89,7 +89,7 @@
             </el-header>
 
             <el-main>
-              <el-table :data="filterTableData" style="width: 800px">
+              <el-table v-loading="loading" :data="filterTableData" style="width: 800px">
                 <el-table-column prop="name" label="姓名" sortable/>
                 <el-table-column prop="username" label="昵称" sortable/>
                 <el-table-column prop="email" label="邮箱" sortable/>
@@ -146,10 +146,7 @@ const teamId = ref()
 const isNormal = ref(false)
 const isAdmin = ref(false)
 const isCreate = ref(false)
-
-const cancelEvent = () => {
-  console.log('cancel!')
-}
+const loading = ref(false);
 
 function judgeIsNormal(){
 	tableData.value.forEach((item)=>{
@@ -172,8 +169,6 @@ function judgeIsNormal(){
 }
 async function handleAdd(userInfo) {
 	let res = await teamFunction.inviteTeamMember(teamId.value, userInfo.id)
-	//todo 以后记得删
-	// await teamFunction.acceptInvitation(res.data.id, true)
 	await refreshTeamMember()
 	dialogTableVisible.value=false
 }
@@ -224,11 +219,10 @@ async function handleDelete(userInfo) {
 	}
 }
 async function queryAllUser(search_number) {
-  let result = await teamFunction.queryAllUser(search_number)
-  console.log('***********Userresult***********')
-  console.log(result.data)
-  console.log('***********result***********')
-  userTableData.value = result.data.results
+  loading.value = true;
+  let result = await teamFunction.queryAllUser(search_number);
+  userTableData.value = result.data.results;
+  loading.value = false;
 }
 async function refreshTeamMember() {
 	let result = await teamFunction.queryTeamMember(teamId.value)
@@ -279,9 +273,6 @@ const handleEdit = (index, userInfo) => {
 const handleRmv = (index, userInfo) => {
   rmvAdminister(userInfo.id)
 }
-
-
-
 </script>
 
 
