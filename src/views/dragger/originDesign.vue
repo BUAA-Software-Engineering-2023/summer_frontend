@@ -80,7 +80,7 @@
             <div class="list-container" v-for="(data, index) in tableData">
               <div class="list" @click.prevent="intoDesign(data.id)">
                 <div class="imgBx">
-                  <img :src="imagePaths[0]">
+                  <img src="@/assets/1.png">
                 </div>
                 <div class="content">
                   <h2 class="rank"><small>#</small>{{ index + 1 }}</h2>
@@ -137,12 +137,6 @@ import { ElMessage } from "element-plus";
 const router = useRouter()
 const route = useRoute()
 
-import pic1 from '@/assets/1.png'
-import pic2 from '@/assets/2.png'
-import pic3 from '@/assets/3.png'
-import pic4 from '@/assets/4.png'
-
-const imagePaths = [pic1, pic2, pic3, pic4]
 
 const form = reactive({
   name: '',
@@ -724,5 +718,8 @@ h3 {
   border-radius: 10px;
   border: 1px solid #ccc; /* 设置边框 */
   padding: 10px; /* 可选的内边距，根据需要调整 */
+}
+.dialog-footer .el-button{
+  padding: 10px;
 }
 </style>
