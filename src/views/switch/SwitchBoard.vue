@@ -5,7 +5,7 @@
 			<br>
 			<span class="subtitle">选择后将自动为您跳转到主页面</span>
 			<br>
-			<button @click="dialogTableVisible = true" class="view-invitations-button">查看你收到的邀请</button>
+			<button @click="regetNoti" class="view-invitations-button">查看你收到的邀请</button>
 			<el-divider />
 			<el-menu v-for="team in teamTeamTable" key="team.id" class="el-menu-vertical-demo">
 				<el-menu-item index="1" @click="jumpToHome(team.id, team.name)">
@@ -35,6 +35,7 @@
 			<el-menu>
 				<div class="create-team-btn" @click="dialogFormVisible = true">
 					<font-awesome-icon :icon="['fas', 'plus']" />
+          <a>添加团队</a>
 				</div>
 				<el-dialog v-model="dialogFormVisible" title="欢迎来到寄了网站，请创建团队" center width="35%">
 					<el-form :model="form">
@@ -44,9 +45,9 @@
 					</el-form>
 					<template #footer>
 						<span class="dialog-footer">
-							<el-button @click="dialogFormVisible = false">Cancel</el-button>
+							<el-button @click="dialogFormVisible = false">取消</el-button>
 							<el-button type="primary" @click="submitTeam">
-								Confirm
+								确认
 							</el-button>
 						</span>
 					</template>
@@ -65,6 +66,7 @@ import { onMounted, ref, reactive } from 'vue'
 import teamFunction from "@/api/team";
 import { useRoute, useRouter } from "vue-router";
 import { setTeamId, setTeamName } from "@/utils/token"
+import {ElMessage} from "element-plus";
 
 const dialogFormVisible = ref(false) //弹出的对话框的属性值
 const teamTeamTable = ref([])
@@ -87,7 +89,10 @@ const form = reactive({
 	resource: '',
 	desc: '',
 })
-
+async function regetNoti(){
+  await getAllInvitations()
+  dialogTableVisible.value = true
+}
 function jumpToHome(team_id, team_name) {
 	console.log(team_id)
 	console.log(team_name)
@@ -108,6 +113,9 @@ async function getAllInvitations() {
 
 async function submitTeam() {
 	dialogFormVisible.value = false
+  if(form.name === ''){
+    ElMessage.error('请填写团队名称')
+  }
 	await teamFunction.addTeam(form.name);
 	await queryALL()
 }
@@ -259,7 +267,7 @@ onMounted(() => {
 	/* 圆角 */
 	cursor: pointer;
 	/* 鼠标指针样式 */
-	font-size: 14px;
+	font-size: 20px;
 	/* 字体大小 */
 }
 
