@@ -65,6 +65,7 @@ import { onMounted, ref, reactive } from 'vue'
 import teamFunction from "@/api/team";
 import { useRoute, useRouter } from "vue-router";
 import { setTeamId, setTeamName } from "@/utils/token"
+import useCustomLoading from "@/utils/loading";
 
 const dialogFormVisible = ref(false) //弹出的对话框的属性值
 const teamTeamTable = ref([])
@@ -94,12 +95,10 @@ function jumpToHome(team_id, team_name) {
 	setTeamId(team_id)
 	setTeamName(team_name)
 	router.push(('/home'))
-
 }
 
 async function getAllInvitations() {
 	let res = await teamFunction.queryAllInvitation()
-	console.log(res)
 	res.data.forEach(item => {
 		item.team.update_time = Date.parse(item.create_time);
 	});
@@ -115,6 +114,7 @@ async function handleAdd(userInfo, isaccept) {
 	await teamFunction.acceptInvitation(userInfo.id, isaccept)
 	await queryALL()
 	await getAllInvitations()
+  useCustomLoading().end.then(() => {});
 	dialogTableVisible.value = false
 }
 
