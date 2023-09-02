@@ -11,7 +11,6 @@
           <span class="element-title">项目名称：{{ projName }}</span>
         </div>
         <!--        <el-divider />-->
-
         <el-menu-item index="2" @click="seeDocs">
           <div class="menu-item-container-2">
             <font-awesome-icon :icon="['fas', 'file-invoice']" style="color: black;" />
@@ -26,28 +25,26 @@
             <span class="element-title">画布视图</span>
           </div>
         </el-menu-item>
-
-<!--        <el-menu-item index="4">-->
-<!--          <div class="menu-item-container-another">-->
-<!--            <font-awesome-icon class="icon" :icon="['fas', 'diagram-project']" />-->
-<!--            <span class="element-title" >项目描述</span>-->
-<!--            <br>-->
-<!--            <span>{{projDescribe}}</span>-->
-<!--          </div>-->
-<!--        </el-menu-item>-->
+        <!--        <el-menu-item index="4">-->
+        <!--          <div class="menu-item-container-another">-->
+        <!--            <font-awesome-icon class="icon" :icon="['fas', 'diagram-project']" />-->
+        <!--            <span class="element-title" >项目描述</span>-->
+        <!--            <br>-->
+        <!--            <span>{{projDescribe}}</span>-->
+        <!--          </div>-->
+        <!--        </el-menu-item>-->
       </el-menu>
-      <el-divider/>
       <div class="menu-item-container-another">
         <font-awesome-icon class="icon" :icon="['fas', 'diagram-project']" />
-        <span class="element-title" >项目描述</span>
-        <br>
-        <span>{{projDescribe}}</span>
+        <span class="element-title">项目描述</span>
+        <div class="describe-container">
+          {{ projDescribe }}
+        </div>
       </div>
 
-
-<!--      <div class="logo">-->
-<!--        <img src="@/assets/summer.png" alt="Logo">-->
-<!--      </div>-->
+      <!--      <div class="logo">-->
+      <!--        <img src="@/assets/summer.png" alt="Logo">-->
+      <!--      </div>-->
     </el-aside>
 
     <el-container>
@@ -83,7 +80,7 @@
             <div class="list-container" v-for="(data, index) in tableData">
               <div class="list" @click.prevent="intoDesign(data.id)">
                 <div class="imgBx">
-                  <img src="@/assets/2.jpg">
+                  <img :src="imagePaths[0]">
                 </div>
                 <div class="content">
                   <h2 class="rank"><small>#</small>{{ index + 1 }}</h2>
@@ -135,10 +132,17 @@ import originAPI from '@/api/originDesign'
 import { useRouter, useRoute } from "vue-router";
 import documentShow from './documentShow.vue'
 import editor from '../editor/editor.vue'
-import {ElMessage} from "element-plus";
+import { ElMessage } from "element-plus";
 
 const router = useRouter()
 const route = useRoute()
+
+import pic1 from '@/assets/1.png'
+import pic2 from '@/assets/2.png'
+import pic3 from '@/assets/3.png'
+import pic4 from '@/assets/4.png'
+
+const imagePaths = [pic1, pic2, pic3, pic4]
 
 const form = reactive({
   name: '',
@@ -181,7 +185,10 @@ function seeDocs() {
 function seeDesign() {
   switchMenu.value = true
 }
-
+function randomImage() {
+  const randomIndex = Math.floor(Math.random() * imagePaths.value.length);
+  return imagePaths.value[randomIndex];
+}
 function intoDesign(designId) {
   setDesignId(designId)
   console.log('designId', designId)
@@ -223,7 +230,7 @@ async function addDesign() {
 
     await router.push(`/origin/template/${designName.value}`)
     dialogFormVisible2.value = false
-  }else{
+  } else {
     dialogFormVisible.value = true
     ElMessage.error('请选择是否调用模板')
   }
@@ -246,9 +253,9 @@ onMounted(async () => {
   projName.value = getProjectName()
   const result1 = await projAPI.getSingleProject(getProjId())
   projDescribe.value = result1.data.describe
-	if(route.query.back !=null){
-		switchMenu.value = false
-	}
+  if (route.query.back != null) {
+    switchMenu.value = false
+  }
   console.log('projName', projName.value)
   console.log('result', result)
   console.log('result.data', result.data)
@@ -313,7 +320,7 @@ font-awesome-icon {
   cursor: pointer;
   padding: 10px 0;
   margin-left: 10px;
-  font-size: 20px;
+  font-size: 25px;
 }
 
 .menu-item-container-2 {
@@ -325,8 +332,9 @@ font-awesome-icon {
   font-size: 20px;
 }
 
-.menu-item-container-another{
-  margin-left: 25%;
+.menu-item-container-another {
+  font-size: 20px;
+  margin-left: 15px;
 }
 
 .menu-icon {
@@ -708,5 +716,13 @@ h3 {
 .delete {
   font-size: 20px;
   margin-right: 280px;
+}
+
+.describe-container {
+  min-height: 500px;
+  margin-top: 5px;
+  border-radius: 10px;
+  border: 1px solid #ccc; /* 设置边框 */
+  padding: 10px; /* 可选的内边距，根据需要调整 */
 }
 </style>
