@@ -4,7 +4,7 @@
       <el-aside :key="showSidebar" v-if="showSidebar" width="200px">
         <el-row class="tac">
           <el-col :span="24">
-            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+            <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
               <el-menu-item index="5" @click="goBehind">
 <!--                <font-awesome-icon style="margin: auto;" :icon="['fas', 'left-long']" />-->
                  <span style="margin:auto"><strong>返回</strong></span>
@@ -45,11 +45,15 @@
                 </el-menu-item-group>
               </el-sub-menu>
 
-              <el-menu-item index="3" @click="goPreview">
+              <el-menu-item v-show="ifStartPreview === false" index="3" @click="goPreview">
                 <span style="margin:auto"><strong>生成预览</strong></span>
               </el-menu-item>
 
-              <el-menu-item index="4" @click="closePreview">
+<!--              <el-menu-item index="4" @click="closePreview">-->
+<!--                <span style="margin:auto"><strong>删除预览</strong></span>-->
+<!--              </el-menu-item>-->
+
+              <el-menu-item v-show="ifStartPreview === true" index="4" @click="closePreview">
                 <span style="margin:auto"><strong>删除预览</strong></span>
               </el-menu-item>
 
@@ -156,6 +160,9 @@ function openDesign(designId) {
     console.log('-----------------------------------------------------------------------')
 
     changeDesign(designId)
+  }else{
+    editableTabsValue.value = designId
+    changeDesign(designId)
   }
 }
 
@@ -177,16 +184,21 @@ async function get_all_design() {
   myResult.value = result.data
 }
 
+const ifStartPreview = ref(false)
+
 const previewPath = ref();
 async function goPreview() {
   const result = await previewAPI.startPreview(getProjId())
-  previewSrc.value = 'http://localhost:5173/preview?project=' + getProjId()
+  ifStartPreview.value = true
+  previewSrc.value = 'http://azure.pesenteur.eu.org/preview?project=' + getProjId()
+  // previewSrc.value = 'http://localhost:5173/preview?project=' + getProjId()
   previewPath.value = '/preview?project=' + getProjId();
   dialogVisible.value = true
 }
 
 async function closePreview() {
   const result = await previewAPI.cancelPreview(getProjId())
+  ifStartPreview.value = false
   window.alert('预览已关闭，链接失效')
 
 }
