@@ -8,24 +8,20 @@
     <el-col>
       <div class="card-container">
         <div class="button-container">
-          <div class="button-left">
-            <el-popover placement="bottom-start" :width="100" trigger="hover" content="已读所有消息">
-              <template #reference>
-                <button @click="readAllNoti" class="action-button">
-                  <font-awesome-icon :icon="['fas', 'check']" />
-                </button>
-              </template>
-            </el-popover>
-          </div>
-          <div class="button-right">
-            <el-popover placement="bottom-start" :width="100" trigger="hover" content="删除所有已读消息">
-              <template #reference>
-                <button @click="deleteAllRead" class="action-button">
-                  <font-awesome-icon :icon="['fas', 'delete-left']" />
-                </button>
-              </template>
-            </el-popover>
-          </div>
+          <el-popover placement="bottom-start" :width="100" trigger="hover" content="已读所有消息">
+            <template #reference>
+              <button @click="readAllNoti" class="action-button">
+                <font-awesome-icon :icon="['fas', 'check']" />
+              </button>
+            </template>
+          </el-popover>
+          <el-popover placement="bottom-start" :width="100" trigger="hover" content="删除所有已读消息">
+            <template #reference>
+              <button @click="deleteAllRead" class="action-button">
+                <font-awesome-icon :icon="['fas', 'delete-left']" />
+              </button>
+            </template>
+          </el-popover>
         </div>
         <div v-for="msg in messages" :key="msg.notId" class="message-container">
           <el-divider></el-divider>
@@ -294,6 +290,7 @@ async function getAllNoti() {
 .button-container {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .button-left {

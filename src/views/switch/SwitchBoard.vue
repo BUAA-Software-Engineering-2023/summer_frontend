@@ -95,8 +95,6 @@ async function regetNoti(){
   dialogTableVisible.value = true
 }
 function jumpToHome(team_id, team_name) {
-	console.log(team_id)
-	console.log(team_name)
 	setTeamId(team_id)
 	setTeamName(team_name)
 	router.push(('/home'))
