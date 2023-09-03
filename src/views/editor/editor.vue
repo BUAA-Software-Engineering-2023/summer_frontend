@@ -731,13 +731,13 @@ async function restore(dId) {
     if (editor.value.storage.collaborationCursor.users.length === 1) {
       console.log(dId)
       await documentRequest.restore(dId)
-      Location.reload()
       documentId.value = dId
+      location.reload()
       ElMessage({
         message: '回退成功',
         type: 'success'
       })
-    } {
+    } else{
       ElMessage({
         message: '多人协同编辑不能回退',
         type: 'error'
