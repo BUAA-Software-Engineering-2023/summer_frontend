@@ -1,29 +1,13 @@
 # summer_frontend
 
-This template should help get you started developing with Vue 3 in Vite.
+BUAA软院2023年小学期项目前端部分
 
-## Recommended IDE Setup
+主要基于Vue3+Element Plus构建页面
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+原型设计部分通过iFrame集成[visual-drag](https://gitee.com/qkongtao/visual-drag-demo)实现（[GrapesJS](https://github.com/GrapesJS/grapesjs)应该效果更好）
 
-## Customize configuration
+在线文档协同编辑通过[Tiptap](https://github.com/ueberdosis/tiptap)及[hocuspocus](https://tiptap.dev/hocuspocus/introduction)实现
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+聊天室基于[vue-advanced-chat](https://github.com/antoine92190/vue-advanced-chat)构建页面
 
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+通过Github Action实现自动部署
