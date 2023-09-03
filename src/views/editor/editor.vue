@@ -6,7 +6,7 @@
           <div>
             <button class="goback" @click="backTo"><font-awesome-icon :icon="['fas', 'arrow-up-from-bracket']"
                 style="color: #7dd4df;" /></button>
-            <span class="title" v-if="!isEditingTitle">{{ currentDocumentName }}</span>
+            <span class="title text-limit" v-if="!isEditingTitle">{{ currentDocumentName }}</span>
             <input v-else v-model="newTitle" class="edit-title-input" />
             <button class="changeName" @click="toggleEditTitle">
               <font-awesome-icon :icon="['fas', isEditingTitle ? 'save' : 'pen-to-square']" />
@@ -38,7 +38,7 @@
             <el-diglog v-if="isDialogVisible" class="dialog">
               <h2>生成共享链接</h2>
               <label for="editable">是否可编辑：</label>
-              <input type="checkbox" id="editable" v-model="isEditable">
+              <el-switch v-model="isEditable" />
               <button @click="generateLink">生成链接</button>
               <button @click="closeDialog">关闭</button>
               <p v-if="sharedLink">
@@ -74,8 +74,9 @@
                     <div v-for="folder in folders" :key="folder.id">
                       <el-sub-menu :index="folder.id" :default-openeds="folder.id">
                         <template #title>
-                          <font-awesome-icon style="color: #53d0ea" :icon="['fas', 'folder']" /><span class="item">{{
-                            folder.name }}</span>
+                          <font-awesome-icon style="color: #53d0ea" :icon="['fas', 'folder']" /><span
+                            class="item text-limit">{{
+                              folder.name }}</span>
                           <button class="transparent-button-2"
                             @click.stop="showAddDocumentDialog(folder.id)"><font-awesome-icon
                               :icon="['fas', 'file-circle-plus']" />
@@ -87,7 +88,8 @@
                         <el-menu-item-group>
                           <el-menu-item v-for="d in folder.documents" :key="d.id" :index="d.id"
                             :class="{ 'is-active': selectedDocumentId === d.id }" @click="changeDocument(d.id, d.title)">
-                            <font-awesome-icon :icon="['fas', 'file']" /><span class="item">{{ d.title }}</span>
+                            <font-awesome-icon :icon="['fas', 'file']" /><span class="item text-limit">{{ d.title
+                            }}</span>
                             <button class="transparent-button-2"
                               @click.stop="showDeleteDocumentDialog(d.id)"><font-awesome-icon :icon="['fas', 'trash']" />
                             </button>
@@ -98,7 +100,8 @@
                     <el-menu-item v-for="document in rootDocuments" :key="document.id" :index="document.id"
                       :class="{ 'is-active': selectedDocumentId === document.id }"
                       @click="changeDocument(document.id, document.title)">
-                      <font-awesome-icon :icon="['fas', 'file']" /><span class="item">{{ document.title }}</span>
+                      <font-awesome-icon :icon="['fas', 'file']" /><span class="item text-limit">{{ document.title
+                      }}</span>
                       <button class="transparent-button-2"
                         @click.stop="showDeleteDocumentDialog(document.id)"><font-awesome-icon :icon="['fas', 'trash']" />
                       </button>
@@ -643,6 +646,10 @@ const processDocuments = (data) => {
   data.forEach(item => {
     if (item.folder === null) {
       rootDocuments.value.push(item)
+      if (item.id === documentId.value) {
+        currentDocumentName.value = item.title;
+        share.value = item.is_shared;
+      }
     } else {
       folders.value.push(item)
       let tem = item.documents
@@ -656,6 +663,7 @@ const processDocuments = (data) => {
     }
     if (item.id === documentId.value) {
       currentDocumentName.value = item.title;
+      share.value = item.is_shared;
     }
   });
 
@@ -663,7 +671,7 @@ const processDocuments = (data) => {
 
 async function generateLink() {
   // 在这里生成共享链接，可以根据 isEditable 的值来决定是否允许编辑
-  const baseUrl = 'http://127.0.0.1:5173/shared/';
+  const baseUrl = 'http://azure.pesenteur.eu.org/shared/';
   share.value = true
   console.log(documentId.value, isEditable.value)
   await documentRequest.createShareLink(documentId.value, isEditable.value)
@@ -783,6 +791,7 @@ async function changeDocument(document, documentName) {
     documentId.value = document
     selectedDocumentId.value = document
     currentDocumentName.value = documentName
+    getAllDocuments()
     const ydoc = new Y.Doc();
     provider.value.destroy();
     provider.value = new HocuspocusProvider({
@@ -1376,5 +1385,19 @@ function exportWord() {
 
 .el-menu--horizontal.el-menu {
   border-bottom: none !important;
+}
+
+.el-aside {
+  overflow: initial !important;
+
+}
+
+.text-limit {
+  max-width: 60px;
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
 }
 </style>

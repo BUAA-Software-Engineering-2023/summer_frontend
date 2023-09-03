@@ -4,13 +4,13 @@
             <el-header>
                 <div class="editor__header">
                     <div>
-                        <span class="title" v-if="!isEditingTitle">111{{ currentDocumentName }}</span>
+                        <span class="title" v-if="!isEditingTitle">{{ currentDocumentName }}</span>
                     </div>
                     <div v-if="Editable" :class="`editor__status editor__status--${status}`">
                         <template v-if="status === 'connected'">
                             {{ editor.storage.collaborationCursor.users.length }} user{{
                                 editor.storage.collaborationCursor.users.length === 1 ? '' : 's'
-                            }} online in {{ documentId }}
+                            }} online in {{ currentDocumentName }}
                         </template>
                         <template v-else>
                             offline
@@ -306,7 +306,7 @@ function getRandomColor() {
 const provider = ref();
 const editor = ref();
 const status = ref('connecting');
-const documentId = ref(route.params.sharedId || '123');
+const documentId = ref(route.params.sharedId);
 const title = ref('');
 const folders = ref([]);
 const rootDocuments = ref([])
@@ -315,8 +315,7 @@ const newTitle = ref(currentDocumentName.value);
 const Editable = ref(true)
 const isEditingTitle = ref(false);
 const currentUser = ref({
-    // TODO 获取用户姓名
-    name: route.params.documentId || '123',
+    name: '游客',
     color: getRandomColor()
 });
 const toggleEditTitle = () => {
@@ -352,9 +351,10 @@ const wordCss = `
 
 onMounted(async () => {
     const result = await documentRequest.getDocumentContent(documentId.value)
+    currentDocumentName.value = result.data.title
     const ydoc = new Y.Doc();
     provider.value = new HocuspocusProvider({
-        url: 'ws://127.0.0.1:1234',
+        url: 'ws://39.105.159.199:1108/hocuspocus',
         name: documentId.value,
         document: ydoc,
         forceSyncInterval: 200
